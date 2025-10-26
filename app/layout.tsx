@@ -1,3 +1,4 @@
+import "./globals.css";
 import { GeistSans } from "geist/font/sans";
 import { Playfair_Display } from "next/font/google";
 
