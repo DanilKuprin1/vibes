@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cometchat/calls-sdk-javascript": "^4.1.2",
+    "@cometchat/chat-uikit-react": "^6.3.2",
     "@fontsource/geist-sans": "^5.2.5",
     "@fontsource/playfair-display": "^5.2.8",
     "@sendbird/uikit-react": "^3.17.3",

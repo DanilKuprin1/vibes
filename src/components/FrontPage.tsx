@@ -1,33 +1,33 @@
-import { supabase } from "@/supabaseClient";
+import loginIntoCometChat from "@/lib/cometChatUtils";
 import { useNavigate } from "react-router";
 
 export default function FrontPage() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
   const onSubmit = async (formData: FormData) => {
-    "use server";
-
     const vibe = formData.get("vibe")?.toString().trim() ?? "";
-
-    const response = await supabase.auth.signInAnonymously();
-
-    if (response.error || !response.data.user?.id) {
-      throw new Error(
-        `Failed to create anonymous session: ${response.error?.message}`
-      );
+    if (vibe == "") {
+      return;
     }
-    const { data, error } = await supabase.from("user_profiles").insert({
-      id: response.data.user?.id,
-      vibe_text: vibe,
-    });
-    if (error) {
-      throw new Error(
-        "Failed to create user_profile for user: " +
-          response.data.user.id +
-          "; Reason: " +
-          error.message
-      );
+    const res = await fetch(
+      import.meta.env.VITE_BACKEND_URL + "first-vibe-submission",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // 👇 important if backend is on another origin
+        credentials: "include",
+        body: JSON.stringify({ text: vibe }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to submit vibe: ${res.status}`);
     }
-    // TODO: start the process of looking for a match to create a chat with.
+    const data = await res.json();
+    console.log("Created user:", data);
+    loginIntoCometChat(data.cometchat.authToken);
 
     const target = "/session";
     navigate(target);
