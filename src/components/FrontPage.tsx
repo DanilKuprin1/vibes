@@ -1,4 +1,38 @@
+import { supabase } from "@/supabaseClient";
+import { useNavigate } from "react-router";
+
 export default function FrontPage() {
+  let navigate = useNavigate();
+  const onSubmit = async (formData: FormData) => {
+    "use server";
+
+    const vibe = formData.get("vibe")?.toString().trim() ?? "";
+
+    const response = await supabase.auth.signInAnonymously();
+
+    if (response.error || !response.data.user?.id) {
+      throw new Error(
+        `Failed to create anonymous session: ${response.error?.message}`
+      );
+    }
+    const { data, error } = await supabase.from("user_profiles").insert({
+      id: response.data.user?.id,
+      vibe_text: vibe,
+    });
+    if (error) {
+      throw new Error(
+        "Failed to create user_profile for user: " +
+          response.data.user.id +
+          "; Reason: " +
+          error.message
+      );
+    }
+    // TODO: start the process of looking for a match to create a chat with.
+
+    const target = "/session";
+    navigate(target);
+  };
+
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top,_theme(colors.primary/18%),transparent_60%)] bg-background text-foreground">
       <div className="absolute inset-0 -z-10">
@@ -28,7 +62,7 @@ export default function FrontPage() {
                 </p>
               </header>
 
-              <form className="space-y-6">
+              <form className="space-y-6" action={onSubmit}>
                 <label
                   htmlFor="vibe"
                   className="block text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
@@ -37,6 +71,7 @@ export default function FrontPage() {
                 </label>
                 <textarea
                   id="vibe"
+                  name="vibe"
                   placeholder="e.g. Curious introvert, craving deep talks"
                   className="h-36 w-full resize-none rounded-2xl border border-border/60 bg-background/80 p-5 text-xl leading-relaxed text-foreground font-[--font-display]  shadow-inner transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
                 />
