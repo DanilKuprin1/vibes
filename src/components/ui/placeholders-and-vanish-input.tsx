@@ -182,11 +182,9 @@ export function PlaceholdersAndVanishInput({
       )}
       onSubmit={handleSubmit}
     >
-      {/* ...canvas stays the same... */}
-
-      {/* 2) change input -> textarea and update handlers/types */}
       <input
         type="text"
+        name="vibe-input"
         onChange={(e) => {
           if (!animating) {
             setValue(e.target.value);
@@ -195,24 +193,14 @@ export function PlaceholdersAndVanishInput({
             onChange && (onChange as any)(e);
           }
         }}
-        // Enter should insert newline; submit with Ctrl+Enter (see onKeyDown below)
-        onKeyDown={(e) => {
-          if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !animating) {
-            e.preventDefault();
-            vanishAndSubmit();
-          }
-        }}
         ref={inputRef as any} // or ref={textAreaRef} if you change the ref type to HTMLTextAreaElement
         value={value}
         className={cn(
           "relative w-full h-full font-sans text-sm sm:text-base z-50 scrollbar-hide text-white bg-transparent rounded-full focus:outline-none focdus:ring-0",
-          // spacing
-          "pl-7 pr-14", // leaves room for the right-side button
-          // height/scroll behavior
-          "resize-none overflow-x-hidden overflow-y-hidden", // no manual resize; allow vertical scroll
-          "whitespace-pre", // keep line breaks and wrap
+          "pl-7 pr-14",
+          "resize-none overflow-x-hidden overflow-y-hidden",
+          "whitespace-pre", //
           "break-keep",
-          // "max-h-[3.5rem*1]", // cap height ~ two lines (adjust as needed)
           animating && "text-transparent"
         )}
       />
