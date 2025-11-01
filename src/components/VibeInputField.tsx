@@ -8,9 +8,6 @@ type VibeInputFieldProps = {
 };
 export default function VibeInputField({ onSubmit }: VibeInputFieldProps) {
   return (
-    <PlaceholdersAndVanishInput
-      placeholders={["Your mood in a sentence…"]}
-      onSubmit={onSubmit}
-    ></PlaceholdersAndVanishInput>
+
   );
 }

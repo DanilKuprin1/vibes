@@ -178,7 +178,7 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        " md:w-100 h-13 relative max-w-xl mx-3 font-serif font-bold bg-input/10 backdrop-blur-xl rounded-4xl overflow-hidden   border-border/10  transition duration-200"
+        "md:w-100 h-13 relative max-w-xl font-serif font-bold bg-input/10 backdrop-blur-xl rounded-4xl overflow-hidden   border-border/10  transition duration-200"
       )}
       onSubmit={handleSubmit}
     >
