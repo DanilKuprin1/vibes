@@ -1,57 +1,127 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+html, body {
+  font-family: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.playfair {
+  font-family: "Playfair Display", serif;
+}
+
+/* globals.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Base */
-  --background: oklch(0.98 0 0);
+  /* Base (unchanged) */
+  --background: oklch(0.985 0 0);
   --foreground: oklch(0.12 0 0);
 
-  /* UI surfaces */
+  /* UI surfaces (unchanged) */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.12 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.12 0 0);
 
   /* Brand */
-  --primary: oklch(0.72 0.25 340);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.68 0.22 335);             /* expressive magenta-violet */
+  --primary-foreground: oklch(0.12 0 0);       /* was white → dark for contrast */
 
-  /* Accent */
-  --accent: oklch(0.72 0.18 192);
-  --accent-foreground: oklch(1 0 0);
+  /* Accent (cool cyan) */
+  --accent: oklch(0.74 0.15 205);
+  --accent-foreground: oklch(0.12 0 0);        /* keep dark for readability */
 
-  /* Neutral / muted */
-  --muted: oklch(0.92 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  /* Neutral / muted (unchanged) */
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.42 0 0);
 
-  --border: oklch(0.85 0 0);
-  --input: oklch(0.85 0 0);
-  --ring: oklch(0.72 0.25 340);
+  /* Inputs & borders (unchanged in light) */
+  --border: oklch(0.82 0 0);
+  --input:  oklch(0.85 0 0);
+  --ring:   oklch(0.68 0.22 335);
+
+  /* Radius (unchanged) */
   --radius: 0.75rem;
+
+  /* States (slight adjustments, dark text for legibility) */
+  --success: oklch(0.72 0.14 145);             /* +L a bit */
+  --success-foreground: oklch(0.12 0 0);
+
+  --warning: oklch(0.82 0.17 80);              /* +L/C a touch */
+  --warning-foreground: oklch(0.12 0 0);
+
+  --danger:  oklch(0.70 0.22 25);              /* +L a bit */
+  --danger-foreground: oklch(0.12 0 0);        /* was white → dark */
+
+  /* Optional interaction tokens so you don't improvise later */
+  --primary-hover:  oklch(0.64 0.22 335);
+  --primary-active: oklch(0.61 0.22 335);
+  --accent-hover:   oklch(0.70 0.15 205);
+  --accent-active:  oklch(0.67 0.15 205);
+
+  --success-hover:  oklch(0.68 0.14 145);
+  --warning-hover:  oklch(0.78 0.17 80);
+  --danger-hover:   oklch(0.66 0.22 25);
+
+  /* Optional vibe gradients for headers/pulses */
+  --gradient-vibe: linear-gradient(
+    135deg,
+    oklch(0.70 0.22 335) 0%,
+    oklch(0.72 0.16 205) 50%,
+    oklch(0.78 0.17 80) 100%
+  );
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+
+  --card: oklch(0.20 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.20 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.72 0.25 340);
-  --primary-foreground: oklch(0.12 0 0);
-  --secondary: oklch(0.269 0 0);
+
+  /* Keep brand hue/chroma identical for recognition */
+  --primary: oklch(0.68 0.22 335);
+  --primary-foreground: oklch(0.12 0 0);       /* stays dark; button remains readable */
+
+  --secondary: oklch(0.26 0 0);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.72 0.18 192);
-  --accent-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+
+  --muted: oklch(0.27 0 0);
+  --muted-foreground: oklch(0.78 0 0);
+
+  /* Stronger structure on dark */
+  --border: oklch(0.35 0 0 / 36%);             /* was 28% */
+  --input:  oklch(0.35 0 0 / 36%);
+
+  --ring: oklch(0.68 0.22 335);
+
+  /* Slightly lower-L accent to keep glow without glare */
+  --accent: oklch(0.72 0.16 205);              /* tiny nudge vs light */
+  --accent-foreground: oklch(0.12 0 0);        /* was white → dark for contrast */
 }
 
+/* Optional utilities (if you want to use the tokens) */
+@layer utilities {
+  .bg-gradient-vibe { background: var(--gradient-vibe); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:active { background: var(--primary-active); }
+  .btn-accent:hover { background: var(--accent-hover); }
+  .btn-accent:active { background: var(--accent-active); }
+}
+
+
+/* Theme map (unchanged) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -74,12 +144,8 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Base layer (unchanged) */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
 }
-

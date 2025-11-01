@@ -10,8 +10,7 @@ import { setupLocalization } from "./CometChat/utils/utils.ts";
 import { CometChatProvider } from "./CometChat/context/CometChatContext.tsx";
 import "@/global.css";
 import "@fontsource/geist-sans/400.css";
-import "@fontsource/playfair-display/400.css";
-import "@fontsource/playfair-display/700.css";
+import "@fontsource-variable/playfair-display/index.css";
 
 import App from "./App.tsx";
 import SessionPage from "./components/SessionPage.tsx";
