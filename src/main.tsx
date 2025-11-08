@@ -15,15 +15,15 @@ import "@fontsource-variable/playfair-display/index.css";
 import App from "./App.tsx";
 import SessionPage from "./components/SessionPage.tsx";
 
+import LoginPage from "./components/LoginPage.tsx";
+
 export const COMETCHAT_CONSTANTS = {
   APP_ID: import.meta.env.VITE_COMETCHAT_APP_ID, // Replace with your App ID
   REGION: import.meta.env.VITE_COMETCHAT_REGION, // Replace with your App Region
-  // AUTH_KEY: "", // Replace with your Auth Key or leave blank if you are authenticating using Auth Token
 };
 const uiKitSettings = new UIKitSettingsBuilder()
   .setAppId(COMETCHAT_CONSTANTS.APP_ID)
   .setRegion(COMETCHAT_CONSTANTS.REGION)
-  // .setAuthKey(COMETCHAT_CONSTANTS.AUTH_KEY)
   .subscribePresenceForAllUsers()
   .build();
 
@@ -36,6 +36,7 @@ CometChatUIKit.init(uiKitSettings)?.then(() => {
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/session" element={<SessionPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </CometChatProvider>

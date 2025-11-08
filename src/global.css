@@ -18,7 +18,6 @@ html, body {
   scrollbar-width: none;     /* Firefox */
 }
 
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -120,7 +119,6 @@ html, body {
   .btn-accent:active { background: var(--accent-active); }
 }
 
-
 /* Theme map (unchanged) */
 @theme inline {
   --color-background: var(--background);
@@ -142,6 +140,14 @@ html, body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  @keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+    }
+  50% {
+    transform: translateY(-10px);
+    }
+  }
 }
 
 /* Base layer (unchanged) */

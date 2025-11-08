@@ -27,8 +27,6 @@ export default function FrontPage() {
   }, [progress, mv]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("e is: ", e);
-
     const form = e.currentTarget;
     const formData = new FormData(form);
     const vibe = formData.get("vibe-input");
@@ -41,7 +39,7 @@ export default function FrontPage() {
     const interval = setInterval(() => {
       setProgress((prev) => {
         // slow approach to ~90%
-        if (prev < 9) return prev + Math.random();
+        if (prev < 8.5) return prev + Math.random();
         return prev;
       });
     }, 300);
@@ -66,10 +64,12 @@ export default function FrontPage() {
       clearInterval(interval);
       setProgress(10);
       await new Promise((resolve) => setTimeout(resolve, 200));
-      // loginIntoCometChat(data.cometchat.authToken);
-
-      // navigate("/session");
+      loginIntoCometChat(data.cometchat.authToken);
+      navigate("/session", {
+        state: { firstTimeUser: true, matchedWithUser: data.matchedWithUser },
+      });
     } catch {
+      // TODO  implement the error page
       navigate("/error");
     }
   };
@@ -85,29 +85,33 @@ export default function FrontPage() {
             <AppDescription></AppDescription>
           </div>
         </div>
-        <div className="flex flex-col grow-3 items-center justify-start">
+        <div className="flex flex-col grow-3 items-center justify-start ">
           {!loading && (
-            <PlaceholdersAndVanishInput
-              placeholders={["Your mood in a sentence…"]}
-              onSubmit={onSubmit}
-            ></PlaceholdersAndVanishInput>
+            <div className="flex flex-col items-center">
+              <PlaceholdersAndVanishInput
+                placeholders={["Your mood in a sentence..."]}
+                onSubmit={onSubmit}
+              ></PlaceholdersAndVanishInput>
+
+              <a
+                href="/login"
+                className="text-foreground font-normal text hover:underline mt-2.5"
+              >
+                Already have an account?{" "}
+              </a>
+            </div>
           )}
           {loading && (
             <div className=" mx-auto w-full max-w-xl text-center">
-              <motion.p className="text-white text-3xl font-bold">
+              <motion.p className="text-foreground text-3xl font-bold">
                 Finding your match <motion.span>{text}</motion.span>
               </motion.p>
             </div>
-
-            // <Progress
-            //   className=" h-[1px] mt-1 w-10/12"
-            //   value={progress}
-            // ></Progress>
           )}
         </div>
       </div>
       <div className="fixed bottom-0 flex justify-between bg-white/0 mb-4 w-full px-6 md:px-4 md:mb-4 ">
-        <span className="text-white/15">
+        <span className="text-foreground/15">
           © {new Date().getFullYear()}{" "}
           <a href="https://github.com/danilkuprin1">Danil Kuprin</a>
         </span>

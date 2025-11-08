@@ -1,14 +1,14 @@
-/* eslint-disable react/no-unescaped-entities */
-import './styles/CometChatApp.css';
-import { AppContextProvider } from './context/AppContext';
-import { CometChatHome } from './components/CometChatHome/CometChatHome';
-import React, { useEffect, useState } from 'react';
-import { useCometChatContext } from './context/CometChatContext';
-import { CometChat } from '@cometchat/chat-sdk-javascript';
-import useSystemColorScheme from './customHooks';
-import { CometChatUIKit } from '@cometchat/chat-uikit-react';
-import '@cometchat/chat-uikit-react/css-variables.css';
-import useThemeStyles from './customHook/useThemeStyles';
+import "./styles/CometChatApp.css";
+import { AppContextProvider } from "./context/AppContext";
+import { CometChatHome } from "./components/CometChatHome/CometChatHome";
+import React, { useEffect, useState } from "react";
+import { useCometChatContext } from "./context/CometChatContext";
+import { CometChat } from "@cometchat/chat-sdk-javascript";
+import useSystemColorScheme from "./customHooks";
+import { CometChatUIKit } from "@cometchat/chat-uikit-react";
+import "@cometchat/chat-uikit-react/css-variables.css";
+import useThemeStyles from "./customHook/useThemeStyles";
+import LoginPage from "@/components/LoginPage";
 
 interface CometChatAppProps {
   /** Default user for the chat application (optional). */
@@ -25,7 +25,11 @@ interface CometChatAppProps {
  * @param {CometChatAppProps} props - The component props.
  * @returns {JSX.Element} The rendered CometChatApp component.
  */
-function CometChatApp({ user, group, showGroupActionMessages }: CometChatAppProps) {
+function CometChatApp({
+  user,
+  group,
+  showGroupActionMessages,
+}: CometChatAppProps) {
   const [loggedInUser, setLoggedInUser] = useState<CometChat.User | null>(null);
   const { styleFeatures, setStyleFeatures } = useCometChatContext();
 
@@ -37,7 +41,7 @@ function CometChatApp({ user, group, showGroupActionMessages }: CometChatAppProp
    */
   useEffect(() => {
     CometChat.addLoginListener(
-      'runnable-sample-app',
+      "runnable-sample-app",
       new CometChat.LoginListener({
         loginSuccess: (user: CometChat.User) => {
           setLoggedInUser(user);
@@ -48,7 +52,7 @@ function CometChatApp({ user, group, showGroupActionMessages }: CometChatAppProp
       })
     );
 
-    return () => CometChat.removeLoginListener('runnable-sample-app');
+    return () => CometChat.removeLoginListener("runnable-sample-app");
   }, []);
 
   /**
@@ -68,7 +72,15 @@ function CometChatApp({ user, group, showGroupActionMessages }: CometChatAppProp
   return (
     <div className="CometChatApp">
       <AppContextProvider>
-        {loggedInUser ? <CometChatHome defaultGroup={group} defaultUser={user} showGroupActionMessages={showGroupActionMessages} /> : <LoginPlaceholder />}
+        {loggedInUser ? (
+          <CometChatHome
+            defaultGroup={group}
+            defaultUser={user}
+            showGroupActionMessages={showGroupActionMessages}
+          />
+        ) : (
+          <LoginPlaceholder />
+        )}
       </AppContextProvider>
     </div>
   );
@@ -77,10 +89,5 @@ function CometChatApp({ user, group, showGroupActionMessages }: CometChatAppProp
 export default CometChatApp;
 
 const LoginPlaceholder = () => {
-  return (
-    <div className="login-placeholder">
-      <div className="cometchat-logo" />
-      <h3>This is where your website&apos;s login screen should appear.</h3>
-    </div>
-  );
+  return <LoginPage></LoginPage>;
 };

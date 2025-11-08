@@ -3,26 +3,26 @@
   "chatFeatures": {
     "coreMessagingExperience": {
       "typingIndicator": true,
-      "threadConversationAndReplies": true,
+      "threadConversationAndReplies": false,
       "photosSharing": true,
-      "videoSharing": true,
-      "audioSharing": true,
-      "fileSharing": true,
+      "videoSharing": false,
+      "audioSharing": false,
+      "fileSharing": false,
       "editMessage": true,
       "deleteMessage": true,
       "messageDeliveryAndReadReceipts": true,
       "userAndFriendsPresence": true,
       "conversationAndAdvancedSearch": true,
       "moderation": true,
-      "quotedReplies": false
+      "quotedReplies": true
     },
     "deeperUserEngagement": {
       "mentions": true,
       "reactions": true,
       "messageTranslation": true,
-      "polls": true,
-      "collaborativeWhiteboard": true,
-      "collaborativeDocument": true,
+      "polls": false,
+      "collaborativeWhiteboard": false,
+      "collaborativeDocument": false,
       "voiceNotes": true,
       "emojis": true,
       "stickers": true,
@@ -35,11 +35,11 @@
       "smartReply": false
     },
     "groupManagement": {
-      "createGroup": true,
-      "addMembersToGroups": true,
-      "joinLeaveGroup": true,
-      "deleteGroup": true,
-      "viewGroupMembers": true
+      "createGroup": false,
+      "addMembersToGroups": false,
+      "joinLeaveGroup": false,
+      "deleteGroup": false,
+      "viewGroupMembers": false
     },
     "moderatorControls": {
       "kickUsers": true,
@@ -47,39 +47,36 @@
       "promoteDemoteMembers": true
     },
     "privateMessagingWithinGroups": {
-      "sendPrivateMessageToGroupMembers": true
+      "sendPrivateMessageToGroupMembers": false
     }
   },
   "callFeatures": {
     "voiceAndVideoCalling": {
-      "oneOnOneVoiceCalling": true,
+      "oneOnOneVoiceCalling": false,
       "oneOnOneVideoCalling": true,
-      "groupVideoConference": true,
-      "groupVoiceConference": true
+      "groupVideoConference": false,
+      "groupVoiceConference": false
     }
   },
   "layout": {
     "withSideBar": true,
     "tabs": [
-      "chats",
-      "calls",
-      "users",
-      "groups"
+      "chats"
     ],
     "chatType": "user"
   },
   "style": {
-    "theme": "system",
+    "theme": "dark",
     "color": {
-      "brandColor": "#6852D6",
+      "brandColor": "#b235a3",
       "primaryTextLight": "#141414",
-      "primaryTextDark": "#FFFFFF",
+      "primaryTextDark": "#fafafa",
       "secondaryTextLight": "#727272",
-      "secondaryTextDark": "#989898"
+      "secondaryTextDark": "#b7b7b7"
     },
     "typography": {
-      "font": "roboto",
-      "size": "default"
+      "font": "inter",
+      "size": "comfortable"
     }
   },
   "noCode": {
