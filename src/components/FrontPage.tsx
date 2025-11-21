@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import AppDescription from "./AppDescription";
 import LogoText from "./LogoText";
 import { ShaderAnimation } from "./ui/neno-shader";
-import loginIntoCometChat from "@/lib/cometChatUtils";
+import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { PlaceholdersAndVanishInput } from "./ui/placeholders-and-vanish-input";
 import {
@@ -12,8 +12,10 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function FrontPage() {
+  const [captchaToken, setCaptchaToken] = useState("");
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -32,8 +34,9 @@ export default function FrontPage() {
     const vibe = formData.get("vibe-input");
 
     if (vibe == "") {
-      return;
+      throw new Error("No vibe....");
     }
+
     setLoading(true);
     setProgress(0);
     const interval = setInterval(() => {
@@ -45,29 +48,40 @@ export default function FrontPage() {
     }, 300);
 
     try {
+      const { data: anonData, error: anonError } =
+        await supabase.auth.signInAnonymously({
+          options: { captchaToken },
+        });
+
+      if (anonError || !anonData?.user) {
+        throw anonError || new Error("Anonymous sign-in failed");
+      }
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        throw new Error("No access token after anonymous sign-in");
+      }
+
       const res = await fetch(
         import.meta.env.VITE_BACKEND_URL + "first-vibe-submission",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
           },
-          // 👇 important if backend is on another origin
-          credentials: "include",
           body: JSON.stringify({ text: vibe }),
         }
       );
       if (!res.ok) {
         throw new Error(`Failed to submit vibe: ${res.status}`);
       }
-      const data = await res.json();
       clearInterval(interval);
       setProgress(10);
       await new Promise((resolve) => setTimeout(resolve, 200));
-      loginIntoCometChat(data.cometchat.authToken);
-      navigate("/session", {
-        state: { firstTimeUser: true, matchedWithUser: data.matchedWithUser },
-      });
+      navigate("/session");
     } catch {
       // TODO  implement the error page
       navigate("/error");
@@ -75,6 +89,23 @@ export default function FrontPage() {
   };
   return (
     <main className="relative flex flex-col  items-center w-full h-screen overflow-hidden gap-10 dark">
+      <Turnstile
+        as="aside"
+        siteKey="0x4AAAAAACAN8tU84jhV0dZ6"
+        onSuccess={(token) => {
+          setCaptchaToken(token);
+        }}
+        className="fixed bottom-4 right-4 "
+        options={{
+          action: "front-page",
+          theme: "dark",
+          size: "compact",
+          language: "en",
+        }}
+        scriptOptions={{
+          appendTo: "body",
+        }}
+      />
       <ShaderAnimation />
       <div className="absolute z-10 flex flex-col h-full">
         <div className="flex flex-col justify-center grow-3 gap-20">
