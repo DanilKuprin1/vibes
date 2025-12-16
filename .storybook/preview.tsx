@@ -5,6 +5,9 @@ import "../src/global.css";
 import React from "react";
 
 import { supabase } from "@/lib/supabase/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const withSupabaseTestUser = (Story) => {
   const [state, setState] = React.useState<
@@ -26,6 +29,7 @@ const withSupabaseTestUser = (Story) => {
               captchaToken: "1x00000000000000000000AA",
             },
           });
+        // console.log(await supabase.auth.getUser().data);
 
         if (cancelled) return;
 
@@ -41,7 +45,7 @@ const withSupabaseTestUser = (Story) => {
           return;
         }
 
-        console.log("Storybook login session", loginData?.session);
+        // console.log("Storybook login session", loginData);
 
         // Double-check we actually have a session
         const { data: sessionData, error: sessionError } =
@@ -49,7 +53,7 @@ const withSupabaseTestUser = (Story) => {
 
         if (cancelled) return;
 
-        console.log("Storybook getSession()", { sessionData, sessionError });
+        // console.log("Storybook getSession()", { sessionData, sessionError });
 
         if (!sessionData?.session || sessionError) {
           setState({
@@ -93,6 +97,24 @@ const withSupabaseTestUser = (Story) => {
   return <Story />;
 };
 
+const withPresenceUpdates = (Story) => {
+  async function updatePresence() {
+    const user_id = (await supabase.auth.getUser()).data.user?.id;
+    // console.log("updated user presense");
+    // console.log("user_id is: ", user_id);
+    if (!user_id) {
+      return;
+    }
+    await supabase
+      .from("user_presence")
+      .upsert({ user_id: user_id, last_seen: new Date().toISOString() });
+  }
+
+  // example: call every 25 seconds
+  setInterval(updatePresence, 30000);
+  return <Story></Story>;
+};
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -106,14 +128,17 @@ const preview: Preview = {
 
   decorators: [
     withSupabaseTestUser,
+    withPresenceUpdates,
     (Story, context) => {
       const initialPath = (context.args as any)?.initialPath || "/";
       return (
-        <MemoryRouter initialEntries={[initialPath]}>
-          <Routes>
-            <Route path="*" element={<Story />} />
-          </Routes>
-        </MemoryRouter>
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter initialEntries={[initialPath]}>
+            <Routes>
+              <Route path="*" element={<Story />} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
       );
     },
   ],

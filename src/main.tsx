@@ -8,15 +8,34 @@ import "@fontsource-variable/playfair-display/index.css";
 import App from "./App.tsx";
 import SessionPage from "./features/chatview/components/SessionPage.tsx";
 import LoginPage from "./components/LoginPage.tsx";
+import { supabase } from "@/lib/supabase/client.ts";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
+
+async function updatePresence() {
+  const user_id = (await supabase.auth.getUser()).data.user?.id;
+  if (!user_id) {
+    return;
+  }
+  await supabase
+    .from("user_presence")
+    .upsert({ user_id: user_id, last_seen: new Date().toISOString() });
+}
+
+// example: call every 25 seconds
+setInterval(updatePresence, 30000);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/session" element={<SessionPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/session" element={<SessionPage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   </StrictMode>
 );

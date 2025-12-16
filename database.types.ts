@@ -104,25 +104,46 @@ export type Database = {
         }
         Relationships: []
       }
+      user_presence: {
+        Row: {
+          last_seen: string
+          user_id: string
+        }
+        Insert: {
+          last_seen?: string
+          user_id: string
+        }
+        Update: {
+          last_seen?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           created_at: string
+          display_name: string | null
           go_emotions_scores: string | null
           id: string
+          is_looking_for_match: boolean
           text_embedding: string | null
           vibe_text: string
         }
         Insert: {
           created_at?: string
+          display_name?: string | null
           go_emotions_scores?: string | null
           id: string
+          is_looking_for_match?: boolean
           text_embedding?: string | null
           vibe_text: string
         }
         Update: {
           created_at?: string
+          display_name?: string | null
           go_emotions_scores?: string | null
           id?: string
+          is_looking_for_match?: boolean
           text_embedding?: string | null
           vibe_text?: string
         }

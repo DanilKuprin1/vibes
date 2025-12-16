@@ -1,15 +1,18 @@
 import { cn } from "@/lib/utils";
 import { ChatMessageItem } from "@/components/chat-message";
-import { useChatScroll } from "@/hooks/use-chat-scroll";
-import { type ChatMessage, useRealtimeChat } from "@/hooks/use-realtime-chat";
+import { useChatScroll } from "@/features/chatview/hooks/use-chat-scroll";
+import {
+  type ChatMessage,
+  useRealtimeChat,
+} from "@/features/chatview/hooks/use-realtime-chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
+import { useCurrentUserProfile } from "../hooks/useCurrentUserProfile";
 
 interface RealtimeChatProps {
-  roomName: string;
+  roomId: string;
   username: string;
   onMessage?: (messages: ChatMessage[]) => void;
   messages?: ChatMessage[];
@@ -24,31 +27,20 @@ interface RealtimeChatProps {
  * @returns The chat component
  */
 export const RealtimeChat = ({
-  roomName,
-  username,
+  roomId,
   onMessage,
   messages: initialMessages = [],
 }: RealtimeChatProps) => {
   const { containerRef, scrollToBottom } = useChatScroll();
-  useEffect(() => {
-    const load = async () => {
-      const out = await supabase.auth.getUser();
-      console.log(`current session: ${JSON.stringify(out)}`);
-      console.log(`user_id: ${out.data.user?.id}`);
-
-      return;
-    };
-    load();
-  }, []);
+  useEffect(() => {}, []);
+  const { data: profile, isLoading, isError } = useCurrentUserProfile();
 
   const {
     messages: realtimeMessages,
     sendMessage,
     isConnected,
   } = useRealtimeChat({
-    roomId: roomName,
-    currentUserId: username,
-    currentUserName: "test_user1",
+    roomId: roomId,
   });
   const [newMessage, setNewMessage] = useState("");
 
@@ -113,7 +105,7 @@ export const RealtimeChat = ({
               >
                 <ChatMessageItem
                   message={message}
-                  isOwnMessage={message.user_id === username}
+                  isOwnMessage={message.user_id === profile?.id}
                   showHeader={showHeader}
                 />
               </div>
