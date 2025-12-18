@@ -1,17 +1,17 @@
-// SessionPage.stories.tsx
+// ChatsView.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import SessionPage from "@/features/chatview/components/SessionPage";
+import ChatsView from "@/features/chatview/components/ChatsView";
 
 const meta = {
-  title: "Pages/SessionPage",
-  component: SessionPage,
+  title: "Pages/ChatsView",
+  component: ChatsView,
   parameters: {
     reactRouter: {
       pathname: "/session",
       state: { firstTimeUser: true, matchedWithUser: "alex" },
     },
   },
-} satisfies Meta<typeof SessionPage>;
+} satisfies Meta<typeof ChatsView>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

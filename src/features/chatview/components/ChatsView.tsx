@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { useUpdateIsLookingForMatch } from "../hooks/useUpdateIsLookingForMatch";
 import { Button } from "@/components/ui/button";
 
-function SessionPage() {
+function ChatsView() {
   const [userChats, setUserChats] = useState<string[] | []>([]);
   const [openChat, setOpenChat] = useState<string | null>(null);
   const { data: profile } = useCurrentUserProfile();
@@ -163,4 +163,4 @@ function SessionPage() {
   );
 }
 
-export default SessionPage;
+export default ChatsView;

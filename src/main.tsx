@@ -6,7 +6,7 @@ import "@fontsource/geist-sans/400.css";
 import "@fontsource-variable/playfair-display/index.css";
 
 import App from "./App.tsx";
-import SessionPage from "./features/chatview/components/SessionPage.tsx";
+import ChatsView from "./features/chatview/components/ChatsView.tsx";
 import LoginPage from "./components/LoginPage.tsx";
 import { supabase } from "@/lib/supabase/client.ts";
 
@@ -32,7 +32,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/session" element={<SessionPage />} />
+          <Route path="/session" element={<ChatsView />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>
