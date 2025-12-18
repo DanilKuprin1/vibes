@@ -124,6 +124,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           go_emotions_scores: string | null
+          last_matched_at: string | null
           id: string
           is_looking_for_match: boolean
           text_embedding: string | null
@@ -133,6 +134,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           go_emotions_scores?: string | null
+          last_matched_at?: string | null
           id: string
           is_looking_for_match?: boolean
           text_embedding?: string | null
@@ -142,6 +144,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           go_emotions_scores?: string | null
+          last_matched_at?: string | null
           id?: string
           is_looking_for_match?: boolean
           text_embedding?: string | null
