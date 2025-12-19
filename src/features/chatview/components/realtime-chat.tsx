@@ -83,7 +83,7 @@ export const RealtimeChat = ({
   );
 
   return (
-    <div className="flex flex-col h-200 w-200  border-4 border-amber-300 bg-background text-foreground antialiased">
+    <div className="flex flex-col h-200 w-200 border bg-background text-foreground antialiased">
       {/* Messages */}
       <div ref={containerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {allMessages.length === 0 ? (
