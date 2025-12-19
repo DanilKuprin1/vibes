@@ -7,6 +7,7 @@ import { useCurrentUserProfile } from "../hooks/useCurrentUserProfile";
 import { Switch } from "@/components/ui/switch";
 import { useUpdateIsLookingForMatch } from "../hooks/useUpdateIsLookingForMatch";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 function ChatsView() {
   const [userChats, setUserChats] = useState<string[] | []>([]);
@@ -16,16 +17,55 @@ function ChatsView() {
   const [isFindingMatch, setIsFindingMatch] = useState(false);
   const [cooldownUntil, setCooldownUntil] = useState<number | null>(null);
   const [cooldownMs, setCooldownMs] = useState<number>(0);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const navigate = useNavigate();
+  const [isCheckingAvailability, setIsCheckingAvailability] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const user = await supabase.auth.getUser();
-      const userId = user.data.user?.id;
-      if (!userId) {
-        throw new Error("No user_id");
+      try {
+        const user = await supabase.auth.getUser();
+        const userId = user.data.user?.id;
+        if (!userId) {
+          navigate("/login", { replace: true });
+          return;
+        }
+        const sessionRes = await supabase.auth.getSession();
+        const sessionUser = sessionRes.data.session?.user;
+        const anon =
+          !!sessionUser?.is_anonymous ||
+          sessionUser?.app_metadata?.provider === "anonymous";
+        setIsAnonymous(anon);
+        const chats = await getUserChats(userId);
+        setUserChats(chats);
+        const stored = sessionStorage.getItem("matchCooldownUntil");
+        let until = stored ? parseInt(stored, 10) : null;
+        if (!until) {
+          const profileRes = await supabase
+            .from("user_profiles")
+            .select("last_matched_at")
+            .eq("id", userId)
+            .single();
+          const lastMatchedRaw = profileRes.data?.last_matched_at;
+          if (lastMatchedRaw) {
+            const last = new Date(lastMatchedRaw).getTime();
+            const target = last + 2 * 60 * 1000;
+            if (target > Date.now()) {
+              until = target;
+            }
+          }
+        }
+        if (until && until > Date.now()) {
+          setCooldownUntil(until);
+          sessionStorage.setItem("matchCooldownUntil", String(until));
+        } else {
+          sessionStorage.removeItem("matchCooldownUntil");
+        }
+      } catch (err) {
+        console.error("Failed to initialize chats view", err);
+      } finally {
+        setIsCheckingAvailability(false);
       }
-      const chats = await getUserChats(userId);
-      setUserChats(chats);
     };
     load();
   }, []);
@@ -57,7 +97,7 @@ function ChatsView() {
   };
 
   async function handleFindMatchClick() {
-    if (cooldownMs > 0) {
+    if (isCheckingAvailability || cooldownMs > 0) {
       return;
     }
     setIsFindingMatch(true);
@@ -140,7 +180,9 @@ function ChatsView() {
                 onClick={() => {
                   handleFindMatchClick();
                 }}
-                disabled={isFindingMatch || cooldownMs > 0}
+                disabled={
+                  isFindingMatch || cooldownMs > 0 || isCheckingAvailability
+                }
               >
                 {isFindingMatch
                   ? "Finding..."
@@ -148,6 +190,15 @@ function ChatsView() {
                   ? `Wait ${formatCooldown()}`
                   : "Find Match"}
               </Button>
+              {isAnonymous && (
+                <Button
+                  variant="outline"
+                  className="ml-2"
+                  onClick={() => navigate("/sign-up")}
+                >
+                  Sign up to save your account
+                </Button>
+              )}
             </div>
 
             {openChat && (

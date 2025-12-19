@@ -81,7 +81,7 @@ export default function FrontPage() {
       clearInterval(interval);
       setProgress(10);
       await new Promise((resolve) => setTimeout(resolve, 200));
-      navigate("/session");
+      navigate("/chats", { state: { matchedAt: Date.now() } });
     } catch {
       // TODO  implement the error page
       navigate("/error");

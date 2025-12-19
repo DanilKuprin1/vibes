@@ -1,5 +1,5 @@
-// src/lib/supabaseClient.ts
-import { createClient } from "@supabase/supabase-js";
+// src/lib/supabase/client.ts
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "database.types";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
@@ -11,8 +11,11 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 // Singleton client: created once at module load
-export const supabase = createClient<Database>(
+export const supabase = createSupabaseClient<Database>(
   supabaseUrl,
   supabaseKey
   // { db: { schema: 'public' } } // plus options if needed
 );
+
+// Named export to satisfy existing imports; returns the singleton.
+export const createClient = () => supabase;

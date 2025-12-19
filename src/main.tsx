@@ -8,6 +8,7 @@ import "@fontsource-variable/playfair-display/index.css";
 import App from "./App.tsx";
 import ChatsView from "./features/chatview/components/ChatsView.tsx";
 import LoginPage from "./components/LoginPage.tsx";
+import SignUpPage from "./components/SignUpPage.tsx";
 import { supabase } from "@/lib/supabase/client.ts";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -32,8 +33,9 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/session" element={<ChatsView />} />
+          <Route path="/chats" element={<ChatsView />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
