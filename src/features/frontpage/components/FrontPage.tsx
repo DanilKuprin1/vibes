@@ -1,10 +1,7 @@
 import { useNavigate } from "react-router";
-import AppDescription from "./AppDescription";
-import LogoText from "./LogoText";
-import { ShaderAnimation } from "./ui/neno-shader";
+
 import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
-import { PlaceholdersAndVanishInput } from "./ui/placeholders-and-vanish-input";
 import {
   animate,
   motion,
@@ -13,6 +10,10 @@ import {
   useTransform,
 } from "framer-motion";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { ShaderAnimation } from "@/components/ui/neno-shader";
+import LogoText from "@/components/LogoText";
+import AppDescription from "@/components/AppDescription";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 export default function FrontPage() {
   const [captchaToken, setCaptchaToken] = useState("");

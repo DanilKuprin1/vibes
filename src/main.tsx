@@ -6,12 +6,13 @@ import "@fontsource/geist-sans/400.css";
 import "@fontsource-variable/playfair-display/index.css";
 
 import App from "./App.tsx";
-import ChatsView from "./features/chatview/components/ChatsView.tsx";
-import LoginPage from "./components/LoginPage.tsx";
-import SignUpPage from "./components/SignUpPage.tsx";
+import ChatsPage from "./features/chatsview/components/ChatsPage.tsx";
+
 import { supabase } from "@/lib/supabase/client.ts";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import LoginPage from "./features/auth/components/LoginPage.tsx";
+import SignUpPage from "./features/auth/components/SignUpPage.tsx";
 const queryClient = new QueryClient();
 
 async function updatePresence() {
@@ -33,7 +34,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/chats" element={<ChatsView />} />
+          <Route path="/chats" element={<ChatsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
         </Routes>

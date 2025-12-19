@@ -1,6 +1,6 @@
 // ChatsView.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ChatsView from "@/features/chatview/components/ChatsView";
+import ChatsView from "@/features/chatsview/components/ChatsPage";
 
 const meta = {
   title: "Pages/ChatsView",

@@ -1,5 +1,5 @@
-import FrontPage from "./components/FrontPage";
-import "@/global.css";
+
+import FrontPage from "./features/frontpage/components/FrontPage";
 
 function App() {
   return (

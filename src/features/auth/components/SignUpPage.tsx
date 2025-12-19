@@ -1,5 +1,5 @@
-import { SignUpForm } from "./sign-up-form";
-import AnoAI from "./ui/animated-shader-background";
+import AnoAI from "@/components/ui/animated-shader-background";
+import { SignUpForm } from "./SignUpForm";
 
 export default function SignUpPage() {
   return (

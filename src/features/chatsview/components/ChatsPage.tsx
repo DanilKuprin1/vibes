@@ -1,4 +1,4 @@
-import { RealtimeChat } from "@/features/chatview/components/realtime-chat";
+import { RealtimeChat } from "@/features/chatsview/components/RealtimeChat";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { getUserChats } from "../api/chatsData";

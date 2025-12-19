@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RealtimeChat } from "./realtime-chat";
+import { RealtimeChat } from "./RealtimeChat";
 
 const meta = {
   title: "Chat/RealtimeChat",
