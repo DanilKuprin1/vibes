@@ -29,6 +29,7 @@ type DbMessageRow = {
 export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const mapRowToChatMessage = (row: DbMessageRow): ChatMessage => ({
     id: row.id,
@@ -47,6 +48,7 @@ export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
     const loadAndSubscribe = async (attempt = 0) => {
       if (cancelled || !roomId) return;
 
+      setIsLoading(true);
       // 1) Load existing messages for this room
       const { data, error } = await supabase
         .from("messages")
@@ -69,6 +71,7 @@ export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
 
       if (error) {
         console.error("Error loading messages", error);
+        setIsLoading(false);
 
         if (attempt < maxAttempts && !cancelled) {
           const delay = Math.min(1000 * 2 ** attempt, 30000); // 1s,2s,4s... capped
@@ -84,6 +87,7 @@ export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
       if (data) {
         setMessages((data as DbMessageRow[]).map(mapRowToChatMessage));
       }
+      setIsLoading(false);
 
       if (cancelled) return;
 
@@ -149,6 +153,7 @@ export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
       if (channel) {
         supabase.removeChannel(channel);
       }
+      setIsLoading(false);
     };
   }, [roomId]);
 
@@ -177,5 +182,5 @@ export function useRealtimeChat({ roomId }: UseRealtimeChatProps) {
     [roomId]
   );
 
-  return { messages, sendMessage, isConnected };
+  return { messages, sendMessage, isConnected, isLoading };
 }

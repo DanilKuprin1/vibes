@@ -1,7 +1,7 @@
 import { RealtimeChat } from "@/features/chatsview/components/RealtimeChat";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
-import { getUserChats } from "../api/chatsData";
+import { getUserChats, type UserChat } from "../api/chatsData";
 import { ChatSidebar } from "./ChatSidebar";
 import { useCurrentUserProfile } from "../hooks/useCurrentUserProfile";
 import { Switch } from "@/components/ui/switch";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
 function ChatsView() {
-  const [userChats, setUserChats] = useState<string[] | []>([]);
+  const [userChats, setUserChats] = useState<UserChat[]>([]);
   const [openChat, setOpenChat] = useState<string | null>(null);
   const { data: profile } = useCurrentUserProfile();
   const { mutate: setLookingForMatch } = useUpdateIsLookingForMatch();
@@ -20,6 +20,8 @@ function ChatsView() {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const navigate = useNavigate();
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(true);
+  const currentMatchScore =
+    userChats.find((chat) => chat.room_id === openChat)?.match_score ?? null;
 
   useEffect(() => {
     const load = async () => {
@@ -38,6 +40,9 @@ function ChatsView() {
         setIsAnonymous(anon);
         const chats = await getUserChats(userId);
         setUserChats(chats);
+        if (!openChat && chats.length > 0) {
+          setOpenChat(chats[0].room_id);
+        }
         const stored = sessionStorage.getItem("matchCooldownUntil");
         let until = stored ? parseInt(stored, 10) : null;
         if (!until) {
@@ -68,7 +73,7 @@ function ChatsView() {
       }
     };
     load();
-  }, []);
+  }, [navigate, openChat]);
 
   useEffect(() => {
     if (!cooldownUntil) {
@@ -205,6 +210,7 @@ function ChatsView() {
               <RealtimeChat
                 roomId={openChat}
                 username={profile?.display_name ?? "Mystery user"}
+                matchScore={currentMatchScore}
               />
             )}
           </div>

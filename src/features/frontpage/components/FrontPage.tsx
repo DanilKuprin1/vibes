@@ -96,7 +96,7 @@ export default function FrontPage() {
         onSuccess={(token) => {
           setCaptchaToken(token);
         }}
-        className="fixed bottom-4 right-4 "
+        className="fixed bottom-4 right-4 z-7"
         options={{
           action: "front-page",
           theme: "dark",
@@ -108,16 +108,15 @@ export default function FrontPage() {
         }}
       />
       <ShaderAnimation />
-      <div className="absolute z-10 flex flex-col h-full">
-        <div className="flex flex-col justify-center grow-3 gap-20">
-          <div className="flex justify-center ">
-            <LogoText></LogoText>
-          </div>
-          <div className=" ">
-            <AppDescription></AppDescription>
-          </div>
+      <div className="bg-black/15  backdrop-blur-md absolute z-4 w-full h-full"></div>
+      <div className="absolute z-10 flex flex-col h-full justify-center gap-50">
+        <div className="flex justify-center ">
+          <LogoText></LogoText>
         </div>
-        <div className="flex flex-col grow-3 items-center justify-start ">
+        <div className="">
+          <AppDescription></AppDescription>
+        </div>
+        <div className="">
           {!loading && (
             <div className="flex flex-col items-center">
               <PlaceholdersAndVanishInput
@@ -133,16 +132,17 @@ export default function FrontPage() {
               </a>
             </div>
           )}
-          {loading && (
-            <div className=" mx-auto w-full max-w-xl text-center">
-              <motion.p className="text-foreground text-3xl font-bold">
-                Finding your match <motion.span>{text}</motion.span>
-              </motion.p>
-            </div>
-          )}
         </div>
+
+        {loading && (
+          <div className=" mx-auto w-full max-w-xl text-center">
+            <motion.p className="text-foreground text-3xl font-bold">
+              Finding your match <motion.span>{text}</motion.span>
+            </motion.p>
+          </div>
+        )}
       </div>
-      <div className="fixed bottom-0 flex justify-between bg-white/0 mb-4 w-full px-6 md:px-4 md:mb-4 ">
+      <div className="fixed z-7 bottom-0 flex justify-between bg-white/0 mb-4 w-full px-6 md:px-4 md:mb-4 ">
         <span className="text-foreground/15">
           © {new Date().getFullYear()}{" "}
           <a href="https://github.com/danilkuprin1">Danil Kuprin</a>

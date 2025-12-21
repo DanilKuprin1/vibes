@@ -7,11 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
-  }
   public: {
     Tables: {
       messages: {
@@ -90,16 +85,19 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          match_score: number | null
           name: string | null
         }
         Insert: {
           created_at?: string
           id?: string
+          match_score?: number | null
           name?: string | null
         }
         Update: {
           created_at?: string
           id?: string
+          match_score?: number | null
           name?: string | null
         }
         Relationships: []
@@ -123,31 +121,31 @@ export type Database = {
         Row: {
           created_at: string
           display_name: string | null
-          go_emotions_scores: string | null
-          last_matched_at: string | null
+          go_emotions_scores: string
           id: string
           is_looking_for_match: boolean
-          text_embedding: string | null
+          last_matched_at: string | null
+          text_embedding: string
           vibe_text: string
         }
         Insert: {
           created_at?: string
           display_name?: string | null
-          go_emotions_scores?: string | null
-          last_matched_at?: string | null
+          go_emotions_scores: string
           id: string
           is_looking_for_match?: boolean
-          text_embedding?: string | null
+          last_matched_at?: string | null
+          text_embedding: string
           vibe_text: string
         }
         Update: {
           created_at?: string
           display_name?: string | null
-          go_emotions_scores?: string | null
-          last_matched_at?: string | null
+          go_emotions_scores?: string
           id?: string
           is_looking_for_match?: boolean
-          text_embedding?: string | null
+          last_matched_at?: string | null
+          text_embedding?: string
           vibe_text?: string
         }
         Relationships: []
@@ -166,21 +164,56 @@ export type Database = {
           vibe_text: string
         }[]
       }
-      match_weighted_rerank: {
-        Args: {
-          cand?: number
-          exclude_id?: string
-          k?: number
-          q1: string
-          q2: string
-          w1?: number
-          w2?: number
-        }
+      match_weighted_rerank:
+        | {
+            Args: {
+              cand?: number
+              exclude_id?: string
+              k?: number
+              q1: string
+              q2: string
+              w1?: number
+              w2?: number
+            }
+            Returns: {
+              id: string
+              score: number
+              sim1: number
+              sim2: number
+            }[]
+          }
+        | {
+            Args: {
+              cand?: number
+              exclude_id?: string
+              exclude_ids?: string[]
+              k?: number
+              q1: string
+              q2: string
+              w1?: number
+              w2?: number
+            }
+            Returns: {
+              id: string
+              score: number
+              sim1: number
+              sim2: number
+            }[]
+          }
+      vibe_match_emotions_only: {
+        Args: { cand?: number; exclude_id?: string; k?: number; q1: string }
         Returns: {
+          cosine_similarity: number
           id: string
           score: number
-          sim1: number
-          sim2: number
+        }[]
+      }
+      vibe_match_text_only: {
+        Args: { cand?: number; exclude_id?: string; k?: number; q2: string }
+        Returns: {
+          cosine_similarity: number
+          id: string
+          score: number
         }[]
       }
     }
@@ -315,3 +348,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

@@ -177,7 +177,7 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "md:w-100 h-13 relative max-w-xl font-serif font-bold bg-input/10 backdrop-blur-xl rounded-4xl overflow-hidden   border-border/10  transition duration-200"
+        "md:w-100 h-15 relative max-w-xl font-serif font-bold bg-input/10 backdrop-blur-3xl border border-black/10 rounded-4xl overflow-hidden  transition duration-200"
       )}
       onSubmit={handleSubmit}
     >
@@ -252,7 +252,7 @@ export function PlaceholdersAndVanishInput({
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -15, opacity: 0 }}
               transition={{ duration: 0.3, ease: "linear" }}
-              className="text-white/60 sm:text-base font-sans p-7 text-left pr-10"
+              className="text-white/60 sm:text-base md:text-lg font-sans p-7 text-left pr-10"
               // ↑ keep pr-20 so placeholder also avoids the button
             >
               {placeholders[currentPlaceholder]}

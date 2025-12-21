@@ -16,6 +16,7 @@ interface RealtimeChatProps {
   username: string;
   onMessage?: (messages: ChatMessage[]) => void;
   messages?: ChatMessage[];
+  matchScore?: number | null;
 }
 
 /**
@@ -30,6 +31,7 @@ export const RealtimeChat = ({
   roomId,
   onMessage,
   messages: initialMessages = [],
+  matchScore,
 }: RealtimeChatProps) => {
   const { containerRef, scrollToBottom } = useChatScroll();
   useEffect(() => {}, []);
@@ -39,6 +41,7 @@ export const RealtimeChat = ({
     messages: realtimeMessages,
     sendMessage,
     isConnected,
+    isLoading: isLoadingMessages,
   } = useRealtimeChat({
     roomId: roomId,
   });
@@ -84,8 +87,23 @@ export const RealtimeChat = ({
 
   return (
     <div className="flex flex-col h-200 w-200 border bg-background text-foreground antialiased">
+      <div className="flex items-center justify-between px-4 py-2 border-b">
+        <span className="text-sm font-medium text-muted-foreground">
+          Room: {roomId}
+        </span>
+        {typeof matchScore === "number" && Number.isFinite(matchScore) && (
+          <span className="text-xs text-muted-foreground">
+            Vibe: {(matchScore * 100).toFixed(0)}%
+          </span>
+        )}
+      </div>
       {/* Messages */}
       <div ref={containerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+        {isLoadingMessages && (
+          <div className="text-center text-sm text-muted-foreground">
+            Loading messages...
+          </div>
+        )}
         {allMessages.length === 0 ? (
           <div className="text-center text-sm text-muted-foreground">
             No messages yet. Start the conversation!
